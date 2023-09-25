@@ -1,6 +1,6 @@
-import { mdLinks } from "./components/mdLinks.js";
+import mdLinks from "./components/mdLinks.js";
 
-let userPath = 'components/05-milestone.md'
+let userPath = './'
 
 mdLinks(userPath)
 .then((links) => {

@@ -1,0 +1,178 @@
+  /*   "scripts": {
+    "start": "node --experimental-modules index.js"
+  } */ 
+  lo quité de package.json
+
+  ORDENAR LOS PARENTESIS
+
+  import { validateAbsolutePath, validateExistence, convertRelativePath, extensionMd, getArray, validateURL } from "./config"
+
+const mdLinks = (userPath, validate) =>
+  new Promise((resolve, reject) => {
+
+    //  se asigna con el valor de userPath si la función validateAbsolutePath(userPath) retorna verdadero, 
+    // de lo contrario se asigna el valor retornado por la función convertRelativePath(userPath).
+    let absolutePath = validateAbsolutePath(userPath) ? userPath : convertRelativePath(userPath);
+    if (validateExistence(absolutePath)) {
+      if (/^\.(md|mkd|mdwn|mdown|mdtxt|mdtext|markdown|text)$/.test(extensionMd(absolutePath))) {
+        getArray(rutaAbsoluta)
+          .then((links) => {
+            if (validate) {
+              const promises = links.map((link) => {
+                return validateURL(link.href) // Utiliza la función original
+                  .then((status) => {
+                    link.status = status; // Agrega el código de estado a la propiedad 'status'
+                    return link;
+                  });
+                  .catch((error) => {
+                    link.status = error; // Agrega el código de error a la propiedad 'status'
+                    return link;
+                  });
+                  .then(() => {
+                    return validateURLStatusText(link.href) // Utiliza la nueva función
+                      .then((statusText) => {
+                        link.ok = statusText; // Agrega la propiedad 'statusText'
+                        return link;
+                      })
+                      .catch((error) => {
+                        link.ok = error; // Mensaje genérico
+                        return link;
+                      });
+                  });
+      });
+
+Promise.all(promises)
+  .then((validatedLinks) => {
+    resolve(validatedLinks);
+  })
+  .catch((error) => {
+    reject(error); // Rechaza con el error general de validación de URL
+  });
+                } else {
+  resolve(links);
+}
+              })
+              .catch ((error) => {
+  reject(error);
+});
+          } else {
+  reject('El archivo no es Markdown');
+}
+        } else {
+  reject('La ruta no existe');
+}
+      });
+
+mdLinks
+import { validateAbsolutePath, validateExistence, convertRelativePath, extensionMd, getArray, validateURL, validateURLStatusText } from "./config.js"
+
+const mdLinks = (userPath, validate) =>
+  new Promise((resolve, reject) => {
+
+    //  se asigna con el valor de userPath si la función validateAbsolutePath(userPath) retorna verdadero, 
+    // de lo contrario se asigna el valor retornado por la función convertRelativePath(userPath).
+    let absolutePath = validateAbsolutePath(userPath) ? userPath : convertRelativePath(userPath);
+    // si absolutePath es verdadero
+    if (validateExistence(absolutePath)) {
+      if (/^\.(md|mkd|mdwn|mdown|mdtxt|mdtext|markdown|text)$/.test(extensionMd(absolutePath))) {
+        getArray(absolutePath)
+          .then((links) => {
+            if (validate) {
+              const promises = links.map((link) => {
+                return validateURL(link.href)
+                  .then((status) => {
+                    link.status = status;
+                    return link;
+                  }).catch((error) => {
+                    link.status = error; // Agrega el código de error a la propiedad 'status'
+                    return link;
+                  }).then(() => {
+                    return validateURLStatusText(link.href) // Utiliza la nueva función
+                      .then((statusText) => {
+                        link.ok = statusText; // Agrega la propiedad 'statusText'
+                        return link;
+                      })
+                      .catch((error) => {
+                        link.ok = error; // Mensaje genérico
+                        return link;
+                      });
+                  });
+              });
+              Promise.all(promises)
+                .then((validatedLinks) => {
+                  resolve(validatedLinks);
+                })
+                .catch((error) => {
+                  reject(error); // Rechaza con el error general de validación de URL
+                });
+            } else {
+              resolve(links);
+            }
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      } else {
+        reject('El archivo no es Markdown');
+      }
+    } else {
+      reject('La ruta no existe');
+    }
+  });
+
+
+export { mdLinks }
+
+
+config.js
+const validateURLStatusText = (url) => {
+  return new Promise((resolve, reject) => {
+    // La promesa realiza petición get
+    axios.get(url)
+    // Si la petición es exitosa 
+      .then((response) => {
+        // y el estado del texto es OK
+        if (response.statusText === 'OK') {
+          // la promesa se resuelve con ok
+          resolve('ok');
+          // Si la petición falla o el estado del texto no es OK
+        } else {
+          // Se rechaza la promesa con el mensaje 
+          reject('No se pudo validar la URL');
+        }
+      })
+      .catch((error) => {
+        // si hay error y la respuesta es el estado de texto 'not found'
+        if (error.response && error.response.statusText === 'Not Found') {
+          // se rechaxa con el mensaje
+          reject('fail');
+          // si no, se rechaza con el mensaje:
+        } else {
+          reject('Error al validar la URL');
+        }
+      });
+  });
+};
+const validateURL = (url) => {
+  return new Promise((resolve, reject) => {
+    // se realiza una peticion get a la url
+    axios.get(url)
+    // si la petición es exitosa
+      .then((response) => {
+        // se resuelve la promesa con el estado de respuesta obtenido.
+        resolve(response.status);
+      })
+      .catch((error) => {
+        // Si ocurre un error en la petición, se verifica si existe una respuesta de error 
+        if (error.response) {
+          // se rechaza la promesa con el estado de respuesta del error.
+          reject(error.response.status);
+          // Si no hay una respuesta de error, se rechaza la promesa con el mensaje 'Error al validar la URL'.
+        } else {
+          reject('Error al validar la URL');
+        }
+      });
+  });
+};
+// axios permite utilizar funcionalidades como realizar peticiones HTTP
+import axios from 'axios';
