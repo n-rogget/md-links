@@ -37,23 +37,21 @@ const getArray = (userPath) => {
         reject('Error al leer el archivo: ' + err);
       }
       // Buscamos y extraemos enlaces markdown de un texto. La exp regular coincide con cualquier cadena que tenga el formato 
-      // [texto](url). Texto es cualquier caracter excepto ], y url es cualquier caracter excepto ). g indica que la busqueda
+      // [texto](url). g indica que la busqueda
       // es global y no se detiene tras encontrar la primera coincidencia
-      const regex = /\[([^\]]+)\]\(([^)]+)\)/g;
+      const regex = /\[(.*?)\]\((https?:\/\/.*?)\)/g
       const links = [];
       let match;
       // En cada iteración del bucle se asignan los valores (coincidencias de la exp reg) encontrados a las variables text, 
-      // hrefWithExtension y fileWithExtension. Estos valores representan el texto, la URL y el nombre del archivo con extensión respectivamente
+      // hrefWithExtension y file. Estos valores representan el texto, la URL y el nombre del archivo con extensión respectivamente
       // extraídos de la cadena que coincide con la expresión regular.
       while ((match = regex.exec(text))) {
         // eslint-disable-next-line no-unused-vars
-        const [, text, hrefWithExtension, fileWithExtension] = match;
+        const [, text, hrefWithExtension, file] = match;
 
-        // path.basename() permite obtener el noombre del archivo sin la ruta.
-        const fileNameWithExtension = path.basename(hrefWithExtension);
-        // agrega un objeto al array, con las propiedades href, text y file con sus respectivos valores.
-        links.push({ href: hrefWithExtension, text, file: fileNameWithExtension });
-      }
+               // agrega un objeto al array, con las propiedades href, text y file con sus respectivos valores.
+        links.push({ href: hrefWithExtension, text, file: userPath });
+      } 
       // resuelve la promesa con el valor links (array de enlaces)
       resolve(links);
     });

@@ -1,11 +1,15 @@
 import mdLinks from "./components/mdLinks.js";
 
-let userPath = './docs/README-Nicole.md'
+let userPath = 'docs/04-milestone.md'
 
 mdLinks(userPath)
-.then((links) => {
-  console.log(links);
-})
-.catch((error) => {
-  console.error(error)
-})
+  .then((links) => {
+    if (links.length === 0) {
+      console.log('No hay links');
+    } else {
+      console.log(links);
+    }
+  })
+  .catch((error) => {
+    console.error(error);
+  });

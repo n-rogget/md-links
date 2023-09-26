@@ -2,11 +2,13 @@ import { validateAbsolutePath, validateExistence, convertRelativePath, extension
 
 const mdLinks = (userPath) =>
   new Promise((resolve, reject) => {
+    console.log(userPath)
     //  se asigna con el valor de userPath si la función validateAbsolutePath(userPath) retorna verdadero, 
     // de lo contrario se asigna el valor retornado por la función convertRelativePath(userPath).
     let absolutePath = validateAbsolutePath(userPath) ? userPath : convertRelativePath(userPath);
     // si absolutePath es verdadero
     if (validateAbsolutePath(absolutePath)) {
+      console.log(absolutePath)
       console.log('la ruta es absoluta')
       if (validateExistence(absolutePath)) {
         // console.log(absolutePath)
