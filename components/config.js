@@ -33,9 +33,9 @@ const getArray = (userPath) => {
   return new Promise((resolve, reject) => {
     // lee el contenido del archivo en la ruta especificada. Se codifica el contenido del archivo como texto
     fs.readFile(userPath, 'utf-8', (err, text) => {
-      if (err) {
+/*       if (err) {
         reject('Error al leer el archivo: ' + err);
-      }
+      } */
       // Buscamos y extraemos enlaces markdown de un texto. La exp regular coincide con cualquier cadena que tenga el formato 
       // [texto](url). g indica que la busqueda
       // es global y no se detiene tras encontrar la primera coincidencia
@@ -54,6 +54,7 @@ const getArray = (userPath) => {
       } 
       // resuelve la promesa con el valor links (array de enlaces)
       resolve(links);
+      reject('error al leer el archivo')
     });
   });
 };

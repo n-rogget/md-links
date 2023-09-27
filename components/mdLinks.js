@@ -7,12 +7,12 @@ const mdLinks = (userPath) =>
     // de lo contrario se asigna el valor retornado por la función convertRelativePath(userPath).
     let absolutePath = validateAbsolutePath(userPath) ? userPath : convertRelativePath(userPath);
     // si absolutePath es verdadero
-    if (validateAbsolutePath(absolutePath)) {
+    validateAbsolutePath(absolutePath)
       console.log(absolutePath)
-      console.log('la ruta es absoluta')
+      console.log('La ruta es absoluta')
       if (validateExistence(absolutePath)) {
         // console.log(absolutePath)
-        console.log('la ruta si existe')
+        console.log('La ruta si existe')
         // si la extension del archivo coincide con alguna de esas, se llama a getarray
         if (/^\.(md|mkd|mdwn|mdown|mdtxt|mdtext|markdown|text)$/.test(extensionMd(absolutePath))) {
           getArray(absolutePath)
@@ -23,7 +23,6 @@ const mdLinks = (userPath) =>
       } else {
         reject('La ruta no existe');
       }
-    } 
   });
 
 
