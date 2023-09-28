@@ -1,5 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs';
+import axios from 'axios';
 
 
 // Verificar si la ruta es absoluta. Retorna un boleano
@@ -33,7 +34,7 @@ const getArray = (userPath) => {
   return new Promise((resolve, reject) => {
     // lee el contenido del archivo en la ruta especificada. Se codifica el contenido del archivo como texto
     fs.readFile(userPath, 'utf-8', (err, text) => {
-/*       if (err) {
+  /*  if (err) {
         reject('Error al leer el archivo: ' + err);
       } */
       // Buscamos y extraemos enlaces markdown de un texto. La exp regular coincide con cualquier cadena que tenga el formato 
@@ -58,7 +59,52 @@ const getArray = (userPath) => {
     });
   });
 };
+const validateURL = (url) => {
+  return new Promise((resolve, reject) => {
+    // se utiliza el método axios.get() para hacer una solicitud GET a la URL especificada.
+    axios.get(url)
+      .then((response) => {
+        // Se verifica si el estado de texto de la respuesta es igual a "OK".
+        if (response.statusText === 'OK') {
+          // se resuelve la promesa con el estado de la respuesta.
+          resolve(response.status);
+        } else {
+          reject(response.status);
+        }
+      })
+      .catch((error) => {
+        //si existe una respuesta de error y si tiene un estado de texto.
+        if (error.response && error.response.statusText) {
+          reject(error.response.status);
+          // Si existe un error en la solicitud y no se pudo establecer una conexión con la URL, se rechaza la promesa con el valor 0. 
+        } else if (error.request) {
+          reject( 0/* 'No se pudo establecer una conexión con la URL' */ );
+          //Si el error no está relacionado con la solicitud o es desconocido, se rechaza la promesa con el valor 500.
+        } else {
+          reject(500 /* /'Error desconocido al validar la URL' */ );
+        }
+      });
+  });
+};
 
+const validateURLStatusText = (url) => {
+  return new Promise((resolve, reject) => {
+    axios.get(url)
+      .then((response) => {
+        if (response.statusText === 'OK') {
+          resolve('ok');
+        } else {
+          reject('No se pudo validar la URL');
+        }
+      })
+      .catch((error) => {
+        if (error.response && error.response.statusText === 'Not Found') {
+          reject('fail');
+        } else {
+          reject('Error al validar la URL');
+        }
+      });
+  }); 
+};
 
-
-export { validateAbsolutePath, convertRelativePath, validateExistence, extensionMd, getArray };
+export { validateAbsolutePath, convertRelativePath, validateExistence, extensionMd, getArray, validateURL, validateURLStatusText };

@@ -1,8 +1,8 @@
 import mdLinks from "./components/mdLinks.js";
 
-let userPath = 'docs/04-milestone.md'
+let userPath = 'docs/03-milestone.md'
 
-mdLinks(userPath)
+mdLinks(userPath, true)
   .then((links) => {
     if (links.length === 0) {
       console.log('No hay links');
