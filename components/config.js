@@ -26,6 +26,7 @@ const validateExistence = (userPath => {
 
 // filtrar los archivos con extensión md
 const extensionMd = (userPath => {
+
   // retorna la extension del archivo
   return path.extname(userPath);
 });
@@ -87,7 +88,35 @@ const validateURL = (url) => {
   });
 };
 
+/* const compatiblePath = (path) => {
+  return path.normalize(path);
+} */
+const getFiles = (userPath, extension) => {
+  let filesInDirectory = [];
+  try {
+/*     const normalPath = compatiblePath(path); */
+    const stats = fs.statSync(userPath);
+
+    if (stats.isDirectory()) {
+      const files = fs.readdirSync(userPath);
+      const allPaths = files.map((file) => path.join(userPath, file));
+
+      allPaths.forEach((file) => {
+        const subDirectory = getFiles(file, extension);
+        filesInDirectory = filesInDirectory.concat(subDirectory);
+      });
+    } else if (stats.isFile() && extension === path.extname(userPath)) {
+      filesInDirectory.push(userPath);
+    }
+    return filesInDirectory;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error; 
+  }
+};
 
 
 
-export { validateAbsolutePath, convertRelativePath, validateExistence, extensionMd, getArray, validateURL };
+
+
+export { validateAbsolutePath, convertRelativePath, validateExistence, extensionMd, getArray, validateURL, getFiles };

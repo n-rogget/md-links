@@ -1,6 +1,6 @@
 import mdLinks from "./components/mdLinks.js";
 
-let userPath = 'docs/README-Nicole.md'
+let userPath = 'files'
 
 mdLinks(userPath, true)
   .then((links) => {
