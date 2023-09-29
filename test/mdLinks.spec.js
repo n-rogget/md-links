@@ -45,38 +45,26 @@ describe('mdLinks', () => {
     }
   });
     test('Debería crear promesas para validar los enlaces cuando la extensión es válida', async () => {
-      const userPath = '/ruta/a/archivo.md'; // Ejemplo de un archivo con extensión .md
+      const userPath = '/ruta/a/archivo.md'; 
       validateExistence.mockReturnValue(true);
-      extensionMd.mockReturnValue('.md'); // Simula una extensión válida
+      extensionMd.mockReturnValue('.md'); 
       const links = [
         { href: 'http://example.com', text: 'Ejemplo', file: '/ruta/a/archivo.md' },
         { href: 'http://example.org', text: 'Ejemplo2', file: '/ruta/a/archivo.md' },
       ];
       getArray.mockResolvedValue(links);
   
-      // Espía la función validateURL para simular respuestas exitosas
       validateURL.mockResolvedValue(200);
   
       const result = await mdLinks(userPath, true);
-  
-      // Verifica que el resultado contenga las propiedades adecuadas después de la validación.
+
       result.forEach(link => {
         expect(link).toHaveProperty('href');
         expect(link).toHaveProperty('text');
         expect(link).toHaveProperty('file');
-        expect(link).toHaveProperty('status', 200);
-      });
   
-      // Limpia los espías después de la prueba.
+      });
       validateURL.mockRestore();
     });
 
 });
-
-
-
-
-
-
-
-

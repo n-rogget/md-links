@@ -67,44 +67,27 @@ const validateURL = (url) => {
         // Se verifica si el estado de texto de la respuesta es igual a "OK".
         if (response.statusText === 'OK') {
           // se resuelve la promesa con el estado de la respuesta.
-          resolve(response.status);
-        } else {
+          resolve({status: response.status, ok: 'ok'});
+        } /* else {
           reject(response.status);
-        }
+        } */
       })
       .catch((error) => {
         //si existe una respuesta de error y si tiene un estado de texto.
-        if (error.response && error.response.statusText) {
-          reject(error.response.status);
+        if (error.response && error.response.statusText === 'Not Found') {
+          reject({ status: error.response.status, ok: 'fail' });
           // Si existe un error en la solicitud y no se pudo establecer una conexión con la URL, se rechaza la promesa con el valor 0. 
-        } else if (error.request) {
-          reject( 0/* 'No se pudo establecer una conexión con la URL' */ );
+        } else if (error.response && error.response.statusText) {
+          reject({status: error.response.status, ok: error.response.statusText});
           //Si el error no está relacionado con la solicitud o es desconocido, se rechaza la promesa con el valor 500.
         } else {
-          reject(500 /* /'Error desconocido al validar la URL' */ );
+          reject({ status: 'Error desconocido al validar la URL', ok: 'Error desconocido al validar la URL'});
         }
       });
   });
 };
 
-const validateURLStatusText = (url) => {
-  return new Promise((resolve, reject) => {
-    axios.get(url)
-      .then((response) => {
-        if (response.statusText === 'OK') {
-          resolve('ok');
-        } else {
-          reject('No se pudo validar la URL');
-        }
-      })
-      .catch((error) => {
-        if (error.response && error.response.statusText === 'Not Found') {
-          reject('fail');
-        } else {
-          reject('Error al validar la URL');
-        }
-      });
-  }); 
-};
 
-export { validateAbsolutePath, convertRelativePath, validateExistence, extensionMd, getArray, validateURL, validateURLStatusText };
+
+
+export { validateAbsolutePath, convertRelativePath, validateExistence, extensionMd, getArray, validateURL };

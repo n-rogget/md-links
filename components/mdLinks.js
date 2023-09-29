@@ -1,16 +1,14 @@
-import { validateAbsolutePath, validateExistence, convertRelativePath, extensionMd, getArray, validateURL, validateURLStatusText } from "./config.js"
+import { validateAbsolutePath, validateExistence, convertRelativePath, extensionMd, getArray, validateURL } from "./config.js"
 
 const mdLinks = (userPath, validate) =>
   new Promise((resolve, reject) => {
-    console.log(userPath)
-    console.log(validate)
     //  se asigna con el valor de userPath si la función validateAbsolutePath(userPath) retorna verdadero, 
     // de lo contrario se asigna el valor retornado por la función convertRelativePath(userPath).
     let absolutePath = validateAbsolutePath(userPath) ? userPath : convertRelativePath(userPath);
     // si absolutePath es verdadero
     validateAbsolutePath(absolutePath)
-    console.log(absolutePath)
     console.log('La ruta es absoluta')
+
     if (validateExistence(absolutePath)) {
       // console.log(absolutePath)
       console.log('La ruta si existe')
@@ -24,14 +22,16 @@ const mdLinks = (userPath, validate) =>
               const promises = links.map((link) => {
                 return validateURL(link.href)
                   .then((status) => {
-                    link.status = status;
+                    link.status = status.status;
+                    link.ok = status.ok;
                     return link
                   })
                   .catch((error) => {
-                    link.status = error
+                    link.status = error.status
+                    link.ok = error.ok
                     return link
                   })
-                  .then(() => {
+                  /* .then(() => {
                     return validateURLStatusText(link.href)
                         .then((status) => {
                             link.ok = status
@@ -44,7 +44,7 @@ const mdLinks = (userPath, validate) =>
                         .then(() => {
                             return link; // Devuelve el objeto link para la siguiente cadena de promesas
                         });
-                })
+                }) */
                 
               });
               Promise.all(promises)
