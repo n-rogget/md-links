@@ -88,9 +88,9 @@ const validateURL = (url) => {
   });
 };
 
-/* const compatiblePath = (path) => {
-  return path.normalize(path);
-} */
+const compatiblePath = (userPath) => {
+  return path.normalize(userPath);
+} 
 const getFiles = (userPath, extension) => {
   let filesInDirectory = [];
   try {
@@ -99,16 +99,23 @@ const getFiles = (userPath, extension) => {
 
     if (stats.isDirectory()) {
       const files = fs.readdirSync(userPath);
-      const allPaths = files.map((file) => path.join(userPath, file));
-
+      files.forEach((file) => {
+        const subDirectory = getFiles(path.join(userPath, file), extension);
+        filesInDirectory = filesInDirectory.concat(subDirectory)
+      })
+    
+   }  else if (stats.isFile() && extensionMd(userPath) === extension) {
+    filesInDirectory.push(userPath);
+  }
+      /*  const allPaths = files.map((file) => path.join(userPath, file));
       allPaths.forEach((file) => {
         const subDirectory = getFiles(file, extension);
         filesInDirectory = filesInDirectory.concat(subDirectory);
       });
     } else if (stats.isFile() && extension === path.extname(userPath)) {
       filesInDirectory.push(userPath);
-    }
-    return filesInDirectory;
+    }*/
+    return filesInDirectory; 
   } catch (error) {
     console.error('Error:', error);
     throw error; 
@@ -119,4 +126,4 @@ const getFiles = (userPath, extension) => {
 
 
 
-export { validateAbsolutePath, convertRelativePath, validateExistence, extensionMd, getArray, validateURL, getFiles };
+export { validateAbsolutePath, convertRelativePath, validateExistence, extensionMd, getArray, validateURL, getFiles, compatiblePath };
