@@ -6,37 +6,24 @@ const mdLinks = (userPath, validate) =>
   new Promise((resolve, reject) => {
     //  se asigna con el valor de userPath si la función validateAbsolutePath(userPath) retorna verdadero, 
     // de lo contrario se asigna el valor retornado por la función convertRelativePath(userPath).
-    /*  let absolutePath = validateAbsolutePath(userPath) ? userPath : convertRelativePath(userPath); */
     let absolutePath = compatiblePath(validateAbsolutePath(userPath) ? userPath : convertRelativePath(userPath));
     console.log(absolutePath);
     // si absolutePath es verdadero
-    /* validateAbsolutePath(absolutePath) */
     console.log('La ruta es absoluta')
     if (!validateExistence(absolutePath)) {
       reject('La ruta no existe')
     }
     const filesArray = getFiles(absolutePath, '.md');
+    console.log(filesArray)
     const allLinks = [];
-    /*  if (Array.isArray(absolutePath)) {
-       const filePath = absolutePath.map((file) => {
-         let newPath = validateAbsolutePath(file) ? userPath : convertRelativePath(file);
-         if (validateExistence(newPath)) {
-           // console.log(absolutePath)
-           console.log('La ruta si existe')
-           // si la extension del archivo coincide con alguna de esas, se llama a getarray
-           if (/^\.(md|mkd|mdwn|mdown|mdtxt|mdtext|markdown|text)$/.test(extensionMd(newPath))) {
-             getArray(newPath)
-               .then((links) => {
-                 if (links.length === 0){
-                   console.log ('No hay links')
-                 }
-                 // Si validate es verdadera */
+                
     const processFile = (file) => {
       return getArray(file)
         .then((links) => {
           if (validate) {
-            // se crea array de promesas con map-
+            // se crea array de promesas con map
             const promises = links.map((link) => {
+              /* console.log(validateURL(link.href)) */
               return validateURL(link.href)
                 .then((status) => {
                   link.status = status.status;
@@ -49,16 +36,20 @@ const mdLinks = (userPath, validate) =>
                   return link
                 })
             })
+            // Se devuelve la promesa cuando todas las promesas del array se cumplieron
             return Promise.all(promises);
           } else {
             return links;
           }
         })
         .then((processedLinks) => {
+          //... se pasa cada elemento del array como argumento individual, se resuelven por separado
           allLinks.push(...processedLinks)
         });
     };
+    // con map creo el array de promesas en filesArray
     const filePromises = filesArray.map(processFile);
+    // Espero que todas las promesas se resuelvan o rechacen
     Promise.all(filePromises)
       .then(() => {
         resolve(allLinks);

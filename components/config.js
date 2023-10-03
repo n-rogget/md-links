@@ -101,21 +101,16 @@ const getFiles = (userPath, extension) => {
       const files = fs.readdirSync(userPath);
       files.forEach((file) => {
         const subDirectory = getFiles(path.join(userPath, file), extension);
+        console.log(subDirectory)
         filesInDirectory = filesInDirectory.concat(subDirectory)
       })
     
    }  else if (stats.isFile() && extensionMd(userPath) === extension) {
     filesInDirectory.push(userPath);
   }
-      /*  const allPaths = files.map((file) => path.join(userPath, file));
-      allPaths.forEach((file) => {
-        const subDirectory = getFiles(file, extension);
-        filesInDirectory = filesInDirectory.concat(subDirectory);
-      });
-    } else if (stats.isFile() && extension === path.extname(userPath)) {
-      filesInDirectory.push(userPath);
-    }*/
+
     return filesInDirectory; 
+  
   } catch (error) {
     console.error('Error:', error);
     throw error; 

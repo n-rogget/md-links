@@ -1,6 +1,6 @@
 import mdLinks from "./components/mdLinks.js";
 
-let userPath = 'files'
+let userPath = 'C:/Users/nicol/Desktop/trabajo/md-links/files'
 
 mdLinks(userPath, false)
   .then((links) => {
