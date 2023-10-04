@@ -1,7 +1,39 @@
+/* eslint-disable no-unused-vars */
 import path from 'node:path';
 import fs from 'node:fs';
 import axios from 'axios';
 
+const compatiblePath = (userPath) => {
+  return path.normalize(userPath);
+}
+const getFiles = (userPath) => {
+  let filesInDirectory = [];
+  try {
+/*     const normalPath = compatiblePath(path); */
+    const stats = fs.statSync(userPath);
+
+    if (stats.isDirectory()) {
+      const files = fs.readdirSync(userPath);
+      const fullPath = files.map((file) => path.join(userPath, file))
+
+      fullPath.forEach((file) => {
+        const subDirectory = getFiles(file);
+        // console.log(subDirectory)
+        filesInDirectory.push(...subDirectory);
+
+      })
+    
+   }  else if (stats.isFile() && (/^\.(md|mkd|mdwn|mdown|mdtxt|mdtext|markdown|text)$/.test(path.extname(userPath)))) {
+    filesInDirectory.push(userPath);
+  }
+
+    return filesInDirectory; 
+  
+  } catch (error) {
+    console.error('Error:', error);
+   throw error; 
+  }
+};
 
 // Verificar si la ruta es absoluta. Retorna un boleano
 const validateAbsolutePath = ((userPath) => {
@@ -13,7 +45,7 @@ const convertRelativePath = (userPath => {
   // resolve para convertir de relativa a absoluta
   let absolutePath = path.resolve(userPath);
   // replace para reemplaza barras barras inversas por diagonales
-  absolutePath = absolutePath.replace(/\\/g, '/');
+  absolutePath = compatiblePath(absolutePath);
   return absolutePath;
 });
 
@@ -23,43 +55,41 @@ const validateExistence = (userPath => {
   // fs.existSync es una función que verifica si el archivo o directorio existe en el 
   return fs.existsSync(userPath)
 });
-
+/* 
 // filtrar los archivos con extensión md
 const extensionMd = (userPath => {
 
   // retorna la extension del archivo
   return path.extname(userPath);
-});
+}); */
 
 const getArray = (userPath) => {
   return new Promise((resolve, reject) => {
-    // lee el contenido del archivo en la ruta especificada. Se codifica el contenido del archivo como texto
-    fs.readFile(userPath, 'utf-8', (err, text) => {
-  /*  if (err) {
-        reject('Error al leer el archivo: ' + err);
-      } */
-      // Buscamos y extraemos enlaces markdown de un texto. La exp regular coincide con cualquier cadena que tenga el formato 
-      // [texto](url). g indica que la busqueda
-      // es global y no se detiene tras encontrar la primera coincidencia
-      const regex = /\[(.*?)\]\((https?:\/\/.*?)\)/g
-      const links = [];
-      let match;
-      // En cada iteración del bucle se asignan los valores (coincidencias de la exp reg) encontrados a las variables text, 
-      // hrefWithExtension y file. Estos valores representan el texto, la URL y el nombre del archivo con extensión respectivamente
-      // extraídos de la cadena que coincide con la expresión regular.
-      while ((match = regex.exec(text))) {
-        // eslint-disable-next-line no-unused-vars
-        const [, text, hrefWithExtension, file] = match;
+    const links = [];
+    const fileRelativePath = path.basename(userPath);
 
-               // agrega un objeto al array, con las propiedades href, text y file con sus respectivos valores.
-        links.push({ href: hrefWithExtension, text, file: userPath });
-      } 
-      // resuelve la promesa con el valor links (array de enlaces)
+    fs.readFile(userPath, 'utf-8', (err, text) => {
+      if (err) {
+        reject('Error al leer el archivo: ' + err);
+      }
+
+      const regex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g; // Expresión regular original
+      let match;
+
+      while ((match = regex.exec(text))) {
+        const [, text, hrefWithExtension] = match;
+
+        const linkObject = { href: hrefWithExtension, text, file: fileRelativePath };
+        links.push(linkObject);
+      }
+
       resolve(links);
-      reject('error al leer el archivo')
     });
   });
 };
+
+       
+
 const validateURL = (url) => {
   return new Promise((resolve, reject) => {
     // se utiliza el método axios.get() para hacer una solicitud GET a la URL especificada.
@@ -88,37 +118,4 @@ const validateURL = (url) => {
   });
 };
 
-const compatiblePath = (userPath) => {
-  return path.normalize(userPath);
-} 
-const getFiles = (userPath, extension) => {
-  let filesInDirectory = [];
-  try {
-/*     const normalPath = compatiblePath(path); */
-    const stats = fs.statSync(userPath);
-
-    if (stats.isDirectory()) {
-      const files = fs.readdirSync(userPath);
-      files.forEach((file) => {
-        const subDirectory = getFiles(path.join(userPath, file), extension);
-        console.log(subDirectory)
-        filesInDirectory = filesInDirectory.concat(subDirectory)
-      })
-    
-   }  else if (stats.isFile() && extensionMd(userPath) === extension) {
-    filesInDirectory.push(userPath);
-  }
-
-    return filesInDirectory; 
-  
-  } catch (error) {
-    console.error('Error:', error);
-    throw error; 
-  }
-};
-
-
-
-
-
-export { validateAbsolutePath, convertRelativePath, validateExistence, extensionMd, getArray, validateURL, getFiles, compatiblePath };
+export { validateAbsolutePath, convertRelativePath, validateExistence, getArray, validateURL, getFiles, compatiblePath };

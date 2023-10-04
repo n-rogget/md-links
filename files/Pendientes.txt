@@ -1,0 +1,21 @@
+pasasr a data  OK 
+Apretar continent devuelva  OK
+poner todo en header    OK
+hacer click en countries ok
+Ordenar por tamaño ok
+Ubicar calculo ok
+calcular ok
+Algunas banderas se ven hacia al lado OK
+Hacer click en countries OK
+Que se pueda filtrar y ordenar a la vez OK
+
+
+responsive filter option 
+test historia 5
+
+
+
+
+
+
+

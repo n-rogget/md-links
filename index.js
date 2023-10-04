@@ -1,6 +1,6 @@
 import mdLinks from "./components/mdLinks.js";
 
-let userPath = 'C:/Users/nicol/Desktop/trabajo/md-links/files'
+let userPath = 'files'
 
 mdLinks(userPath, false)
   .then((links) => {
@@ -13,3 +13,5 @@ mdLinks(userPath, false)
   .catch((error) => {
     console.error(error);
   });
+
+  

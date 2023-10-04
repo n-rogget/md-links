@@ -1,27 +1,37 @@
 /* eslint-disable no-unused-vars */
-import { validateAbsolutePath, validateExistence, convertRelativePath, extensionMd, getArray, validateURL, getFiles, compatiblePath } from "./config.js"
+import { validateAbsolutePath, validateExistence, convertRelativePath, getArray, validateURL, getFiles, compatiblePath } from "./config.js"
 
 
-const mdLinks = (userPath, validate) =>
-  new Promise((resolve, reject) => {
+const mdLinks = (userPath, validate) => {
+  return new Promise((resolve, reject) => {
     //  se asigna con el valor de userPath si la función validateAbsolutePath(userPath) retorna verdadero, 
     // de lo contrario se asigna el valor retornado por la función convertRelativePath(userPath).
-    let absolutePath = compatiblePath(validateAbsolutePath(userPath) ? userPath : convertRelativePath(userPath));
-    console.log(absolutePath);
+    const absolutePath = compatiblePath(validateAbsolutePath(userPath) ? userPath : convertRelativePath(userPath));
+    // console.log(absolutePath);
     // si absolutePath es verdadero
     console.log('La ruta es absoluta')
+
     if (!validateExistence(absolutePath)) {
       reject('La ruta no existe')
+      return
     }
-    const filesArray = getFiles(absolutePath, '.md');
-    console.log(filesArray)
+    // obtiene un array de arhivos con extension md en absolutePath
+    
+    
+    // console.log(filesArray)
+    
     const allLinks = [];
-                
+   // procesa archivo, devuelve promesa que resuelve un arry
     const processFile = (file) => {
+      // devuelve promesa que resulve un array de objetos
+    // console.log(getArray(file)) 
       return getArray(file)
+      
         .then((links) => {
+          
           if (validate) {
-            // se crea array de promesas con map
+            // se crea array de promesas con map, 
+            // Cada elemento del array se pasa como argumento a la función
             const promises = links.map((link) => {
               /* console.log(validateURL(link.href)) */
               return validateURL(link.href)
@@ -45,19 +55,27 @@ const mdLinks = (userPath, validate) =>
         .then((processedLinks) => {
           //... se pasa cada elemento del array como argumento individual, se resuelven por separado
           allLinks.push(...processedLinks)
+          return allLinks
         });
     };
-    // con map creo el array de promesas en filesArray
-    const filePromises = filesArray.map(processFile);
+
+   // para cada archivo me devuelve un nuevo arra con las promesas devueltas de process file
+   // Me crea un nuevo array, con lo que se indica en processFile
+const filesArray = getFiles(absolutePath, '.md');
+   const filePromises = filesArray.map(processFile)
+   
     // Espero que todas las promesas se resuelvan o rechacen
+
     Promise.all(filePromises)
       .then(() => {
         resolve(allLinks);
       })
       .catch((error) => {
-        reject(error)
-      })
+        reject(error);
+      });
  
   });
+}
 
 export default mdLinks;
+
