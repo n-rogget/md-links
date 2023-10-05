@@ -8,32 +8,47 @@ const compatiblePath = (userPath) => {
 }
 const getFiles = (userPath) => {
   let filesInDirectory = [];
-  try {
-    /*     const normalPath = compatiblePath(path); */
-    const stats = fs.statSync(userPath);
+  const traverseDirectory = (currentPath) => {
+    const files = fs.readdirSync(currentPath);
+    files.forEach((file) => {
+      const fullPath = path.join(currentPath, file);
+      const stats = fs.statSync(fullPath);
+      if (stats.isDirectory()) {
+        traverseDirectory(fullPath); // Recursivamente explorar subdirectorios
+      } else if (stats.isFile() && /\.(md|mkd|mdwn|mdown|mdtxt|mdtext|markdown|text)$/.test(path.extname(file))) {
+        filesInDirectory.push(fullPath);
+      }
+    });
+  };
+
+  traverseDirectory(userPath);
+  return filesInDirectory;
+};
+/*     const normalPath = compatiblePath(path); */
+/*     const stats = fs.statSync(userPath);
 
     if (stats.isDirectory()) {
       const files = fs.readdirSync(userPath);
-      const fullPath = files.map((file) => path.join(userPath, file))
+      const fullPath = files.map((file) => path.join(userPath, file));
 
       fullPath.forEach((file) => {
         const subDirectory = getFiles(file);
         // console.log(subDirectory)
-        filesInDirectory.push(...subDirectory);
+        filesInDirectory = filesInDirectory.concat(subDirectory);
 
       })
+    
+   }  else if (stats.isFile() && (/^\.(md|mkd|mdwn|mdown|mdtxt|mdtext|markdown|text)$/.test(path.extname(userPath)))) {
+    filesInDirectory.push(userPath);
+  }
 
-    } else if (stats.isFile() && (/^\.(md|mkd|mdwn|mdown|mdtxt|mdtext|markdown|text)$/.test(path.extname(userPath)))) {
-      filesInDirectory.push(userPath);
-    }
-
-    return filesInDirectory;
-
+    return filesInDirectory; 
+  
   } catch (error) {
     console.error('Error:', error);
-    throw error;
+   throw error; 
   }
-};
+}; */
 
 // Verificar si la ruta es absoluta. Retorna un boleano
 const validateAbsolutePath = ((userPath) => {
@@ -42,16 +57,11 @@ const validateAbsolutePath = ((userPath) => {
 // Convertir a una ruta relativa a absoluta
 // en este caso userPath es una ruta relativa
 const convertRelativePath = (userPath => {
-  try {
+  // resolve para convertir de relativa a absoluta
   let absolutePath = path.resolve(userPath);
+  // replace para reemplaza barras barras inversas por diagonales
   absolutePath = compatiblePath(absolutePath);
-  // console.log('hola', absolutePath)
   return absolutePath;
-} 
-catch(err) {
-  console.error('Error al convertir la ruta relativa a absoluta:', err);
-  return null;
-}
 });
 
 // Verificar si la ruta existe en el sistema de archivos
@@ -93,7 +103,7 @@ const getArray = (userPath) => {
   });
 };
 
-
+       
 
 const validateURL = (url) => {
   return new Promise((resolve, reject) => {
@@ -103,7 +113,7 @@ const validateURL = (url) => {
         // Se verifica si el estado de texto de la respuesta es igual a "OK".
         if (response.statusText === 'OK') {
           // se resuelve la promesa con el estado de la respuesta.
-          resolve({ status: response.status, ok: 'ok' });
+          resolve({status: response.status, ok: 'ok'});
         } /* else {
           reject(response.status);
         } */
@@ -114,13 +124,14 @@ const validateURL = (url) => {
           reject({ status: error.response.status, ok: 'fail' });
           // Si existe un error en la solicitud y no se pudo establecer una conexión con la URL, se rechaza la promesa con el valor 0. 
         } else if (error.response && error.response.statusText) {
-          reject({ status: error.response.status, ok: error.response.statusText });
+          reject({status: error.response.status, ok: error.response.statusText});
           //Si el error no está relacionado con la solicitud o es desconocido, se rechaza la promesa con el valor 500.
         } else {
-          reject({ status: 'Error desconocido al validar la URL', ok: 'Error desconocido al validar la URL' });
+          reject({ status: 'Error desconocido al validar la URL', ok: 'Error desconocido al validar la URL'});
         }
       });
   });
 };
 
-export { validateAbsolutePath, convertRelativePath, validateExistence, getArray, validateURL, getFiles, compatiblePath };
+
+export { validateAbsolutePath, convertRelativePath, validateExistence, getArray, validateURL, getFiles, compatiblePath};

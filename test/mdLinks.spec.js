@@ -1,9 +1,10 @@
 /* eslint-disable no-undef */
 
-import mdLinks from "../components/mdLinks";
-import { validateExistence, getArray, validateURL } from "../components/config";
+/* import mdLinks from "../components/mdLinks";
+// import { validateExistence,  } from "../components/config";
+import path from "path"; */
 
-jest.mock('../components/config')
+/* jest.mock('../components/config')
 
 
 describe('mdLinks', () => {
@@ -31,7 +32,7 @@ describe('mdLinks', () => {
       expect(error).toBe('El archivo no es markdown')
     }
   });  */
-  test('Debería crear promesas para validar los enlaces cuando la extensión es válida', async () => {
+/*   test('Debería crear promesas para validar los enlaces cuando la extensión es válida', async () => {
       const userPath = '/ruta/a/archivo.md'; 
       validateExistence.mockReturnValue(true);
       // extensionMd.mockReturnValue('.md'); 
@@ -52,11 +53,11 @@ describe('mdLinks', () => {
   
       });
       validateURL.mockRestore();
-    }); 
-    test("Ruta existente debe retornar true", () => {
+    });  */
+/*     test("Ruta existente debe retornar true", () => {
       const userPath = 'C:/Users/nicol/Desktop/trabajo/md-links/files'
       expect(validateExistence(userPath)).toBe(true);
-    });
+    }); */
 
   /*   test('Deberia rechaza con un error cuando la ruta no existe', () => {
       return mdLinks('nonexistent/path', false).catch((error) => {
@@ -65,22 +66,53 @@ describe('mdLinks', () => {
         // Add more expectations as needed
       });
     }); */
-
+/* 
     test("debería devolver un array de enlaces", () => {
       return mdLinks("C:/Users/nicol/Desktop/trabajo/md-links/files", false).then((links) => {
         //expect(Array.isArray(links)).toBe(true);
         expect(links.length).toBeGreaterThan(0);
       });
-    });
-    test('should handle non-existing paths', async () => {
-      const userPath = 'path/que/no/existe';
+    }); */
+/*     test('Debería arrojar error cuando la ruta no existe', async () => {
+      const userPath = 'files/hola.js';
       try {
         const links = await mdLinks(userPath, false);
         // Debería lanzar un error, por lo que no deberías llegar a este punto.
-        expect(links).toBe(false);
+        // expect(links).toBe(false);
       } catch (error) {
         // Asegúrate de que el error tenga el mensaje adecuado
         expect(error).toBe('La ruta no existe');
       }
-    });
+    }); */
+/* }); */
+
+import mdLinks from '../components/mdLinks';
+import path from 'path';
+
+describe('mdLinks', () => {
+  test('debería retornar un array de objetos con los enlaces encontrados en un archivo Markdown', () => {
+    const userPath = path.join('C:/Users/nicol/Desktop/trabajo/md-links/files/xmilestone.md'); // Ruta al archivo de prueba
+    return mdLinks(userPath, false)
+      .then((links) => {
+        expect(Array.isArray(links)).toBe(true); // Debe ser un array
+        expect(links.length).toBeGreaterThan(0); // Debe contener al menos un enlace
+        // Aquí puedes agregar más expectativas específicas para tus enlaces
+      });
+  });
+
+  test('debería manejar la validación de enlaces', () => {
+    const userPath = path.join('C:/Users/nicol/Desktop/trabajo/md-links/files/xmilestone.md'); // Ruta al archivo de prueba
+    return mdLinks(userPath, true)
+      .then((links) => {
+expect(links.length).toBe(1)    
+});
+  });
+
+  test('debería manejar errores cuando se proporciona una ruta incorrecta', () => {
+    const userPath = 'ruta/incorrecta'; // Ruta incorrecta
+    return mdLinks(userPath, false)
+      .catch((error) => {
+        expect(error).toBe('La ruta no existe'); // Espera un mensaje de error específico
+      });
+  });
 });

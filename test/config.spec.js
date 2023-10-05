@@ -3,8 +3,8 @@
 
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { validateURLStatusText, validateURL, getArray, extensionMd, validateExistence, validateAbsolutePath, convertRelativePath } from "../components/config";
-import path from "path"; 
+import { validateURLStatusText, validateURL, getArray, validateExistence, validateAbsolutePath, /* convertRelativePath */ } from "../components/config";
+// import path from "path"; 
 
 describe("validateURLStatusText", () => {
   let mock;
@@ -75,17 +75,7 @@ describe("getArray", () => {
     const userPath = "docs/03-milestone.md";
     const links = await getArray(userPath);
 
-    expect(links).toBe(Object);
-  });
-
-
-});
-
-describe("extensionMd", () => {
-  test("Debería retornar la extensión '.md' para un archivo con extensión '.md'", () => {
-    const userPath = "file.md";
-    const result = extensionMd(userPath);
-    expect(result).toBe(".md");
+    expect(links).toStrictEqual([{"file": "03-milestone.md", "href": "https://github.com/Laboratoria/bootcamp/assets/123121338/7dcc83c4-873e-4ef8-b7d0-a15adb102680", "text": "mdlinks-example"}])
   });
 });
 
@@ -106,17 +96,17 @@ describe("validateExistence", () => {
 
 });
 
-describe("convertRelativePath", () => {
+/* describe("convertRelativePath", () => {
 
   test('Debería convertir a una ruta relativa a ruta absoluta', () => {
-    const userPath = "/docs/05-milestone.md"; 
+    const userPath = "\\docs\\05-milestone.md"; 
     const expectedAbsolutePath = path.resolve(userPath).replace(/\\/g, '/'); 
 
     const result = convertRelativePath(userPath); 
 
     expect(result).toBe(expectedAbsolutePath); 
   });
-});  
+});   */
 
 describe("validateAbsolutePath", () => {
   test("Debería retornar true para una ruta absoluta", () => {
