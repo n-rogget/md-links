@@ -1,66 +1,30 @@
-# Markdown Links
+![MD LINKS](https://github.com/n-rogget/md-links/assets/139395222/76ccd882-723a-4513-8215-20049ea0af16)
 
 ## Índice
 
-* [1. Preámbulo](#1-preámbulo)
-* [2. Resumen del proyecto](#2-resumen-del-proyecto)
-* [3. Objetivos de aprendizaje](#3-objetivos-de-aprendizaje)
-* [4. Consideraciones generales](#4-consideraciones-generales)
-* [5. Consideraciones técnicas](#5-consideraciones-técnicas)
-* [6. Hitos](#6-hitos)
-* [7. Hacker edition](#7-hacker-edition)
-* [8. Pistas, tips y lecturas complementarias](#8-pistas-tips-y-lecturas-complementarias)
-* [9. Para pedir project feedback](#9-para-pedir-project-feedback)
+* [1. Introducción](#1-introoduccion)
+* [2. Instalación](#2-instalacion)
+* [3. Uso básico](#3-uso-basico)
+* [4. Opciones avanzadas](#4-opciones-avanzadas)
+* [5. Proceso de diseño y desarrollo](#5-proceso-de-diseño-y-desarrollo)
+* [6. Herramientas de elaboración](#6-herramientas-de-elaboracion)
 
 ***
 
-## 1. Preámbulo
+## 1. Introducción
 
-[Markdown](https://es.wikipedia.org/wiki/Markdown) es un lenguaje de marcado
-ligero muy popular entre developers. Es usado en
-muchísimas plataformas que manejan texto plano (GitHub, foros, blogs, etc.) y
-es muy común encontrar varios archivos en ese formato en cualquier tipo de
-repositorio (empezando por el tradicional `README.md`).
+MD LINKS es una API desarrollada en node.js, la cual se utiliza para buscar y extraer links que se encuentren dentro de archivos Markdown (.md) y proporcionar diferentes opciones para que los usuarios puedan verificar si links son válidos o están rotos, y entregar estadisticas al respecto, de esta manera se brinda una solucion efectiva a quienes trabajan con este tipo de archivo verificando la integridad de los links contenidos. MD LINKS nos brinda las siguientes funciones:
 
-Estos archivos `Markdown` normalmente contienen _links_ (vínculos/ligas) que
-muchas veces están rotos o ya no son válidos y eso perjudica mucho el valor de
-la información que se quiere compartir.
+* `Extracción de links`: Permite extraer todos los links presentes en los archivos Markdown de forma precisa, 
+                       identificando tanto el texto del links como su URL.
+* `Validacion de links`: Para aquellos usuarios que deseen asegurarse de que los links dentro de sus archivos siguen siendo válidos,
+                      MD LINKS ofrece una opción para validar el estado de cada link mediante peticiones HTTP.
+* `Información detallada`: El resultado del análisis muestra información detallada sobre cada link, incluyendo su estado HTTP y si ha pasado la validación, 
+                        lo que permite identificar enlaces rotos y realizar correcciones necesarias.
 
-Dentro de una comunidad de código abierto, nos han propuesto crear una
-herramienta usando [Node.js](https://nodejs.org/), que lea y analice archivos
-en formato `Markdown`, para verificar los links que contengan y reportar
-algunas estadísticas.
+## 2. Instalación
 
-![md-links](https://github.com/Laboratoria/bootcamp/assets/12631491/fc6bc380-7824-4fab-ab8f-7ab53cd9d0e4)
 
-## 2. Resumen del proyecto
-
-En este proyecto desarrollarás una librería en Node.js que funcionará como
-herramienta para analizar links dentro de archivos Markdown. Esta librería
-estará disponible de dos formas: como un módulo publicado en GitHub, que las
-usuarias podrán instalar e importar en otros proyectos, y como una interfaz
-de línea de comandos (CLI) que permitirá utilizar la librería directamente
-desde el terminal.
-
-[Node.js](https://nodejs.org/es/) es un entorno de ejecución para JavaScript
-construido con el [motor de JavaScript V8 de Chrome](https://developers.google.com/v8/).
-Esto nos va a permitir ejecutar JavaScript en el entorno del sistema operativo,
-ya sea tu máquina o un servidor, lo cual nos abre las puertas para poder
-interactuar con el sistema en sí, archivos, redes, etc.
-
-En esta oportunidad nos alejamos un poco del navegador para construir una
-librería que interactua con el sistema archivos y un script que se ejecute
-usando Node.js. Aprenderemos cómo buscar y leer archivos, cómo hacer consultas
-de red, sobre procesos (`process.env`, `process.argv`, ...), etc.
-
-Diseñar tu propia librería es una experiencia fundamental para cualquier
-desarrolladora porque que te obliga a pensar en la interfaz (API) de tus
-_módulos_ y cómo será usado por otras developers. Debes tener especial
-consideración en peculiaridades del lenguaje, convenciones y buenas prácticas.
-Al finalizar, podrás instalar esta librería utilizando NPM (Node Package
-Manager), que facilita la búsqueda e instalación de librerías de Node a
-través de su registro y también de GitHub. Una vez que hayas subido la
-librería a tu repositorio público, será accesible para otras developers.
 
 ## 3. Objetivos de aprendizaje
 
