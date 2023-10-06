@@ -1,8 +1,8 @@
 import mdLinks from "./components/mdLinks.js";
 
-let userPath = 'files'
+/* let userPath = 'files' */
 
-mdLinks(userPath, true)
+/* mdLinks(userPath, true)
   .then((links) => {
     if (links.length === 0) {
       console.log('No hay links');
@@ -12,6 +12,7 @@ mdLinks(userPath, true)
   })
   .catch((error) => {
     console.error(error);
-  });
+  }); */
+ export default mdLinks
 
   

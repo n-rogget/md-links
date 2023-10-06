@@ -3,11 +3,11 @@ import { validateAbsolutePath, validateExistence, convertRelativePath, getArray,
 
 
 const mdLinks = (userPath, validate) => {
- console.log({ userPath })
+ // console.log({ userPath })
   return new Promise((resolve, reject) => {
     //  se asigna con el valor de userPath si la función validateAbsolutePath(userPath) retorna verdadero, 
     // de lo contrario se asigna el valor retornado por la función convertRelativePath(userPath).
-    console.log( 1, userPath)
+    // console.log( 1, userPath)
     const absolutePath = compatiblePath(validateAbsolutePath(userPath) ? userPath : convertRelativePath(userPath));
    // console.log("convertRelativePath", convertRelativePath(userPath));
     // si absolutePath es verdadero
@@ -26,6 +26,7 @@ const mdLinks = (userPath, validate) => {
       // devuelve promesa que resulve un array de objetos
       return getArray(file)
         .then((links) => {
+           
           if (validate) {
             // se crea array de promesas con map, 
             // Cada elemento del array se pasa como argumento a la función
@@ -34,12 +35,12 @@ const mdLinks = (userPath, validate) => {
               return validateURL(link.href)
                 .then((status) => {
                   link.status = status.status;
-                  link.ok = status.ok;
+                  link.ok = 'ok';
                   return link
                 })
                 .catch((error) => {
                   link.status = error.status
-                  link.ok = error.ok
+                  link.ok = 'fail'
                   return link
                 })
             })
@@ -56,7 +57,7 @@ const mdLinks = (userPath, validate) => {
         });
     };
     // obtener lista de archivos del directorio, devuelve array con los nombre de los archivos
-    console.log({ absolutePath })
+    // console.log({ absolutePath })
     const filesArray = getFiles(absolutePath);
    // console.log({ filesArray })
     // aplicar processFile a cada elemento de filesArray
