@@ -69,7 +69,7 @@ const mdLinks = (userPath, validate) => {
       .then(() => {
         resolve(allLinks);
         // console.log(filesArray)
-        // console.log(filePromises)
+       console.log(absolutePath)
       })
       .catch((error) => {
         reject(error);
@@ -77,6 +77,6 @@ const mdLinks = (userPath, validate) => {
 
   });
 }
-
+ 
 export default mdLinks;
 

@@ -19,8 +19,8 @@ const getFiles = (userPath) => {
       fullPath.forEach((file) => {
         const subDirectory = getFiles(file);
         // console.log(subDirectory)
-        filesInDirectory.push(...subDirectory);
-
+       // filesInDirectory.push(...subDirectory);
+       filesInDirectory = filesInDirectory.concat(subDirectory);
       })
 
     } else if (stats.isFile() && (/^\.(md|mkd|mdwn|mdown|mdtxt|mdtext|markdown|text)$/.test(path.extname(userPath)))) {
@@ -86,6 +86,7 @@ const getArray = (userPath) => {
 
         const linkObject = { href: hrefWithExtension, text, file: fileRelativePath };
         links.push(linkObject);
+       // console.log(linkObject)
       }
 
       resolve(links);

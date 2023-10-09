@@ -23,9 +23,9 @@ if (putValidate && putStats) {
         return links.findIndex((l) => l.href === link.href) !== index;
       }); */
       console.log(chalk.magentaBright('Cantidad de links:', links.length)); 
-      console.log(chalk.blueBright('Links válidos:', linksValidated.length)); 
-      console.log(chalk.cyanBright('Links rotos:', linksBroken.length));
-      console.log(chalk.greenBright('Links únicos:', oneLink.size)); 
+      console.log(chalk.blueBright('Cantidad de links válidos:', linksValidated.length)); 
+      console.log(chalk.cyanBright('Cantidad de links rotos:', linksBroken.length));
+      console.log(chalk.greenBright('Cantidad de links únicos:', oneLink.size)); 
       console.log(chalk.yellowBright('Cantidad de links repetidos: ', links.length-oneLink.size)); 
 /*       console.log(chalk.redBright('Links repetidos: '), linkRepeated)
  */        
@@ -39,7 +39,7 @@ if (putValidate && putStats) {
   .then((links) => {
     links.forEach(link => {
         const truncatedText = link.text.length > 50 ? link.text.slice(0, 50) + '...' : link.text;
-        console.log(chalk.magentaBright('file: ', userPath))
+        console.log(chalk.magentaBright('file: ', link.file))
         console.log(chalk.blueBright('href: ',link.href))
         console.log(chalk.cyanBright('text: ', truncatedText))
         console.log(chalk.greenBright('status: ', link.status))
@@ -59,7 +59,7 @@ if (putValidate && putStats) {
         return links.findIndex((l) => l.href === link.href) !== index;
       }); */
       console.log(chalk.cyan('Cantidad de links:', links.length));
-      console.log(chalk.blueBright('Links únicos:', oneLink.size));
+      console.log(chalk.blueBright('Cantidad de links únicos:', oneLink.size));
       console.log(chalk.magentaBright('Cantidad de links repetidos: ', links.length-oneLink.size))
    //   console.log(chalk.redBright('Links repetidos: '), linkRepeated)
     })
@@ -73,7 +73,7 @@ if (putValidate && putStats) {
       links.forEach(link => {
 
           const truncatedText = link.text.length > 50 ? link.text.slice(0, 50) + '...' : link.text;
-          console.log(chalk.magentaBright('file: ', userPath))
+          console.log(chalk.magentaBright('file: ', link.file))
           console.log(chalk.blueBright('href: ', link.href))
           console.log(chalk.greenBright('text: ', truncatedText));
           console.log(' ');

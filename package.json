@@ -24,7 +24,8 @@
     "chalk": "^5.3.0",
     "colors": "^1.4.0",
     "figlet": "^1.6.0",
-    "inquirer": "^9.2.11"
+    "inquirer": "^9.2.11",
+    "md-links": "github:n-rogget/md-links"
   },
   "scripts": {
     "start": "node index.js",
