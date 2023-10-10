@@ -11,7 +11,7 @@ const putStats = args.includes('--stats');
 
 if (!userPath) {
     console.error('Ingrese una ruta válida');
-    process.exit(1); // Salir del programa con código de error
+    process.exit(1);
   }
 
 if (putValidate && putStats) {
@@ -19,16 +19,12 @@ if (putValidate && putStats) {
     .then((links) => {
       const linksValidated = links.filter(link => link.ok === 'ok');
       const linksBroken = links.filter(link => link.ok === 'fail');      const oneLink = new Set(links.map(link => link.href)); 
-/*       const linkRepeated = links.filter((link, index) => {
-        return links.findIndex((l) => l.href === link.href) !== index;
-      }); */
       console.log(chalk.magentaBright('Cantidad de links:', links.length)); 
       console.log(chalk.blueBright('Cantidad de links válidos:', linksValidated.length)); 
       console.log(chalk.cyanBright('Cantidad de links rotos:', linksBroken.length));
       console.log(chalk.greenBright('Cantidad de links únicos:', oneLink.size)); 
       console.log(chalk.yellowBright('Cantidad de links repetidos: ', links.length-oneLink.size)); 
-/*       console.log(chalk.redBright('Links repetidos: '), linkRepeated)
- */        
+     
       })
     .catch((error) => {
       console.error(error);
@@ -55,13 +51,9 @@ if (putValidate && putStats) {
   mdLinks(userPath, false)
   .then((links) => {
       const oneLink = new Set(links.map(link => link.href)); 
-    /*   const linkRepeated = links.filter((link, index) => {
-        return links.findIndex((l) => l.href === link.href) !== index;
-      }); */
       console.log(chalk.cyan('Cantidad de links:', links.length));
       console.log(chalk.blueBright('Cantidad de links únicos:', oneLink.size));
       console.log(chalk.magentaBright('Cantidad de links repetidos: ', links.length-oneLink.size))
-   //   console.log(chalk.redBright('Links repetidos: '), linkRepeated)
     })
   .catch((error) => {
     console.error(error);
@@ -71,13 +63,11 @@ if (putValidate && putStats) {
     mdLinks(userPath)
     .then((links) => {
       links.forEach(link => {
-
           const truncatedText = link.text.length > 50 ? link.text.slice(0, 50) + '...' : link.text;
           console.log(chalk.magentaBright('file: ', link.file))
           console.log(chalk.blueBright('href: ', link.href))
           console.log(chalk.greenBright('text: ', truncatedText));
           console.log(' ');
-          
       });
   })
   .catch((error) => {
