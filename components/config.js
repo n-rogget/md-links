@@ -2,7 +2,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import axios from 'axios';
-
+ 
 //  Con normalize se convierte la ruta en fromato standar, eliminando redundamcias o inconsistencias
 const compatiblePath = (userPath) => {
   return path.normalize(userPath);
@@ -47,7 +47,6 @@ const convertRelativePath = (userPath => {
   }
   catch (err) {
     console.error('Error al convertir la ruta relativa a absoluta:', err);
-    return null;
   }
 });
 

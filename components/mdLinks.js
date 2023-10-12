@@ -8,7 +8,6 @@ const mdLinks = (userPath, validate) => {
     // si la ruta no existe da mensaje de error
     if (!validateExistence(absolutePath)) {
       reject('La ruta no existe')
-      return
     }
     const allLinks = [];
     // procesa el archivo
@@ -49,7 +48,6 @@ const mdLinks = (userPath, validate) => {
     Promise.all(filePromises)
       .then(() => {
         resolve(allLinks);
-        console.log(absolutePath)
       })
       .catch((error) => {
         reject(error);

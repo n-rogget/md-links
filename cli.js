@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+ 
 /* eslint-disable no-undef */
 import chalk from 'chalk';
 import mdLinks from "./components/mdLinks.js";
@@ -18,7 +18,8 @@ if (putValidate && putStats) {
     mdLinks(userPath, true)
     .then((links) => {
       const linksValidated = links.filter(link => link.ok === 'ok');
-      const linksBroken = links.filter(link => link.ok === 'fail');      const oneLink = new Set(links.map(link => link.href)); 
+      const linksBroken = links.filter(link => link.ok === 'fail');      
+      const oneLink = new Set(links.map(link => link.href)); 
       console.log(chalk.magentaBright('Cantidad de links:', links.length)); 
       console.log(chalk.blueBright('Cantidad de links válidos:', linksValidated.length)); 
       console.log(chalk.cyanBright('Cantidad de links rotos:', linksBroken.length));
